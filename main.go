@@ -12,9 +12,14 @@ import (
 
 func main() {
 	sqlDB := dataaccess.InitializeSequelDB("postgres://user:password@localhost:5432/student-service?sslmode=disable")
-	userDA := dataaccess.NewUserDA(sqlDB)
-	userService := service.NewUserService(userDA)
+
+	userRepo := dataaccess.NewUserRepo(sqlDB)
+	userService := service.NewUserService(userRepo)
 	userController := controller.NewUserController(userService)
+
+	classRepo := dataaccess.NewClassRepo(sqlDB)
+	classService := service.NewClassService(classRepo)
+	classController := controller.NewClassController(classService)
 
 	server := initializeHTTPServer()
 	// Index page
@@ -24,6 +29,9 @@ func main() {
 
 	server.POST("/user", userController.CreateUser)
 	server.GET("/users", userController.GetUsers)
+
+	server.POST("/class", classController.CreateClass)
+	server.GET("/classes", classController.GetClasses)
 
 	server.Logger.Fatal(server.Start("127.0.0.1:8080"))
 }

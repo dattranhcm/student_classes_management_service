@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Classes struct {
+type Class struct {
 	ClassId   int       `json:"class_id"`
 	ClassName string    `json:"class_name"`
 	TeacherId int       `json:"teacher_id"`

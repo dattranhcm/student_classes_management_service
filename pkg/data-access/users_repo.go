@@ -24,6 +24,6 @@ func (s *userRepo) GetUsers(c context.Context) ([]entity.User, error) {
 	return list, err
 }
 
-func NewUserDA(dbc *bun.DB) interfaces.UsersRepository {
+func NewUserRepo(dbc *bun.DB) interfaces.UsersRepository {
 	return &userRepo{dbc}
 }

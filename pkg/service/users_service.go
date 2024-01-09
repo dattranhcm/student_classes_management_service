@@ -9,7 +9,7 @@ import (
 )
 
 type usersService struct {
-	db interfaces.UsersDA
+	db interfaces.UsersRepository
 }
 
 func (s *usersService) CreateUser(ctx context.Context, info model.Users) (model.Users, error) {
@@ -45,6 +45,6 @@ func mapToUserModel(s entity.User) model.Users {
 	}
 }
 
-func NewUserService(db interfaces.UsersDA) *usersService {
+func NewUserService(db interfaces.UsersRepository) *usersService {
 	return &usersService{db}
 }

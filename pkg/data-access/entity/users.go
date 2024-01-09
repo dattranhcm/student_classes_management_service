@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	bun.BaseModel `bun:"users"`
+	bun.BaseModel `bun:"table:users"`
 	UserId        int       `bun:"user_id,pk,autoincrement"`
 	Username      string    `bun:"username"`
 	Password      string    `bun:"password"`

@@ -22,8 +22,8 @@ func main() {
 		return c.String(http.StatusOK, "It works!")
 	})
 
-	server.POST("/user", userService.CreateUser)
-	server.GET("/users", userService.GetUsers)
+	server.POST("/user", userController.CreateUser)
+	server.GET("/users", userController.GetUsers)
 
 	server.Logger.Fatal(server.Start("127.0.0.1:8080"))
 }

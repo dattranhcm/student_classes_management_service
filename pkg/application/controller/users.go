@@ -2,9 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"student_classes_management_service/pkg/application/interfaces"
 	"student_classes_management_service/pkg/application/model"
+	"student_classes_management_service/pkg/utils"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,13 +17,17 @@ type userController struct {
 
 func (api *userController) CreateUser(e echo.Context) error {
 	registerInfo := new(model.Users)
-	student, err := api.userService.CreateUser(e.Request().Context(), *registerInfo)
-	if err != nil {
-		log.Print(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "Could not register new student")
+	if err := utils.BindAndValidate(e, registerInfo); err != nil {
+		return err
 	}
 
-	return e.JSON(http.StatusCreated, student)
+	user, err := api.userService.CreateUser(e.Request().Context(), *registerInfo)
+	if err != nil {
+		log.Print(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Could not register new User")
+	}
+
+	return e.JSON(http.StatusCreated, user)
 }
 
 func (api *userController) GetUsers(c echo.Context) error {

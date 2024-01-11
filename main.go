@@ -32,6 +32,7 @@ func main() {
 
 	server.POST("/class", classController.CreateClass)
 	server.GET("/classes", classController.GetClasses)
+	server.POST("/classes/assign/:id", classController.AssignStudent)
 
 	server.Logger.Fatal(server.Start("127.0.0.1:8080"))
 }

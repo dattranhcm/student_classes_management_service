@@ -2,6 +2,7 @@ CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(100) NOT NULL,
+    fullname VARCHAR(200) NOT NULL, 
     user_type VARCHAR(20) NOT NULL,
     created_at timestamp,
     updated_at timestamp,

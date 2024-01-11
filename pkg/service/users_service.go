@@ -16,6 +16,7 @@ func (s *usersService) CreateUser(ctx context.Context, info model.Users) (model.
 	newUser := entity.User{
 		Username: info.Username,
 		UserType: info.UserType,
+		FullName: info.FullName,
 		Password: utils.HashPassword(info.Password),
 	}
 
@@ -42,6 +43,7 @@ func mapToUserModel(s entity.User) model.Users {
 		UserId:   s.UserId,
 		Username: s.Username,
 		UserType: s.UserType,
+		FullName: s.FullName,
 	}
 }
 

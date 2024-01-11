@@ -14,6 +14,7 @@ type userRepo struct {
 }
 
 func (s *userRepo) CreateUser(ctx context.Context, user *entity.User) (sql.Result, error) {
+	s.dbc.RegisterModel((*entity.StudentClass)(nil))
 	return s.dbc.NewInsert().Model(user).Exec(ctx)
 }
 

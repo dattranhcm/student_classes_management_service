@@ -40,6 +40,33 @@ func (api *classController) GetClasses(c echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
+func (c *classController) GetById(e echo.Context) error {
+	classId := e.Param("class_id")
+
+	result, err := c.classesService.GetById(e.Request().Context(), classId, "1")
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, result)
+}
+
+func (c *classController) AssignStudent(e echo.Context) error {
+	classId := e.Param("class_id")
+
+	assignStudent := new(model.AssignStudent)
+	if err := utils.BindAndValidate(e, assignStudent); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	if err := c.classesService.AssignStudent(e.Request().Context(), classId, assignStudent.StudentIds, "1"); err != nil {
+		return err
+	}
+
+	class, _ := c.classesService.GetById(e.Request().Context(), classId, "1")
+	return e.JSON(http.StatusOK, class)
+}
+
 func NewClassController(u interfaces.ClassesService) interfaces.ClassesController {
 	return &classController{u}
 }

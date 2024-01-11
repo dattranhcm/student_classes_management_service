@@ -38,7 +38,6 @@ func main() {
 }
 
 func initializeHTTPServer() *echo.Echo {
-	// Echo instance customization
 	e := echo.New()
 
 	e.HideBanner = true

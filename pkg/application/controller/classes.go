@@ -52,8 +52,7 @@ func (c *classController) GetById(e echo.Context) error {
 }
 
 func (c *classController) AssignStudent(e echo.Context) error {
-	classId := e.Param("class_id")
-
+	classId := e.Param("id")
 	assignStudent := new(model.AssignStudent)
 	if err := utils.BindAndValidate(e, assignStudent); err != nil {
 		return echo.ErrBadRequest

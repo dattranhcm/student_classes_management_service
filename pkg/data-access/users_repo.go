@@ -26,5 +26,6 @@ func (s *userRepo) GetUsers(c context.Context) ([]entity.User, error) {
 }
 
 func NewUserRepo(dbc *bun.DB) interfaces.UsersRepository {
+	dbc.RegisterModel((*entity.StudentClass)(nil))
 	return &userRepo{dbc}
 }

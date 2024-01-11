@@ -45,5 +45,6 @@ func (c *classRepo) AssignStudent(ctx context.Context, studentClass []entity.Stu
 }
 
 func NewClassRepo(dbc *bun.DB) interfaces.ClassesRepository {
+	dbc.RegisterModel((*entity.StudentClass)(nil))
 	return &classRepo{dbc}
 }

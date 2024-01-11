@@ -19,7 +19,7 @@ func (s *classRepo) CreateClass(ctx context.Context, class *entity.Class) (sql.R
 
 func (s *classRepo) GetClasses(c context.Context) ([]entity.Class, error) {
 	var list []entity.Class
-	err := s.dbc.NewSelect().Model(&list).Scan(c)
+	err := s.dbc.NewSelect().Model(&list).Relation("Teacher").Scan(c)
 
 	return list, err
 }

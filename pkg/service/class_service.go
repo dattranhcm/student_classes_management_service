@@ -15,6 +15,9 @@ func (s *classesService) CreateClass(ctx context.Context, info model.Class) (mod
 	newClass := entity.Class{
 		ClassName: info.ClassName,
 		TeacherId: info.TeacherId,
+		DayOfWeek: info.DayOfWeek,
+		StartTime: info.StartTime,
+		EndTime:   info.EndTime,
 	}
 
 	_, err := s.db.CreateClass(ctx, &newClass)
@@ -37,11 +40,15 @@ func (s *classesService) GetClasses(c context.Context) ([]model.Class, error) {
 func mapToClassModel(s entity.Class) model.Class {
 
 	return model.Class{
-		ClassId:   s.ClassId,
-		ClassName: s.ClassName,
-		TeacherId: s.TeacherId,
-		CreatedAt: s.CreatedAt,
-		UpdatedAt: s.UpdatedAt,
+		ClassId:     s.ClassId,
+		ClassName:   s.ClassName,
+		TeacherId:   s.TeacherId,
+		TeacherName: s.Teacher.Username,
+		DayOfWeek:   s.DayOfWeek,
+		StartTime:   s.StartTime,
+		EndTime:     s.EndTime,
+		CreatedAt:   s.CreatedAt,
+		UpdatedAt:   s.UpdatedAt,
 	}
 }
 

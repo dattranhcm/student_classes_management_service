@@ -42,8 +42,13 @@ func (api *classController) GetClasses(c echo.Context) error {
 
 func (c *classController) GetById(e echo.Context) error {
 	classId := e.Param("class_id")
+	claims, err := utils.GetTokenClaims(e)
 
-	result, err := c.classesService.GetById(e.Request().Context(), classId, "1")
+	if err != nil {
+		return err
+	}
+
+	result, err := c.classesService.GetById(e.Request().Context(), classId, claims.ID)
 	if err != nil {
 		return err
 	}
@@ -52,13 +57,19 @@ func (c *classController) GetById(e echo.Context) error {
 }
 
 func (c *classController) AssignStudent(e echo.Context) error {
-	classId := e.Param("id")
+	classId := e.Param("class_id")
+
+	claims, err := utils.GetTokenClaims(e)
+	if err != nil {
+		return err
+	}
+
 	assignStudent := new(model.AssignStudent)
 	if err := utils.BindAndValidate(e, assignStudent); err != nil {
 		return echo.ErrBadRequest
 	}
 
-	if err := c.classesService.AssignStudent(e.Request().Context(), classId, assignStudent.StudentIds, "1"); err != nil {
+	if err := c.classesService.AssignStudent(e.Request().Context(), classId, assignStudent.StudentIds, claims.ID); err != nil {
 		return err
 	}
 

@@ -46,9 +46,11 @@ func (api *userController) Login(e echo.Context) error {
 		return err
 	}
 	student, err := api.userService.FindByUsername(e.Request().Context(), credential.Username)
-
+	fmt.Println("AAA")
+	fmt.Println(student)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential")
+		fmt.Println(err)
+	//	return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential")
 	}
 
 	if err := utils.ComparePassword(student.Password, credential.Password); err == nil {
@@ -56,7 +58,35 @@ func (api *userController) Login(e echo.Context) error {
 		return e.JSON(http.StatusOK, map[string]string{"token": token})
 	}
 
-	return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential abc")
+	return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential")
+}
+
+func (api *userController) GetClasses(e echo.Context) error {
+	claims, _ := utils.GetTokenClaims(e)
+	classes, err := api.userService.GetClasses(e.Request().Context(), claims.Username)
+
+	if err != nil {
+		return err
+	}
+
+	return e.JSON(http.StatusOK, classes)
+}
+
+
+func (api *userController) Profile(e echo.Context) error {
+	claims, err := utils.GetTokenClaims(e)
+
+	if err != nil {
+		return err
+	}
+
+	student, err := api.userService.FindByUsername(e.Request().Context(), claims.Username)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Fail to parse into from token")
+	}
+
+	return e.JSON(http.StatusOK, student)
 }
 
 func NewUserController(u interfaces.UsersService) interfaces.UsersController {

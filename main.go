@@ -32,10 +32,12 @@ func main() {
 	classController := controller.NewClassController(classService)
 
 	server.POST("/login", userController.Login)
+	server.GET("/users", userController.GetUsers)
 
 	authenticated := server.Group("/user", appMiddlewares.Authentication)
-	authenticated.POST("/user", userController.CreateUser)
-	authenticated.GET("/users", userController.GetUsers)
+	authenticated.POST("/register", userController.CreateUser)
+	authenticated.GET("/profile", userController.Profile)
+	authenticated.GET("/course",userController.GetClasses)
 
 	teacherRoute := server.Group("/class", appMiddlewares.Authentication,
 		appMiddlewares.Authorization(constant.TeacherRole))

@@ -43,6 +43,18 @@ func (s *usersService) FindByUsername(ctx context.Context, username string) (mod
 	return mapToUserModel(student), err
 }
 
+
+func (s *usersService) GetClasses(ctx context.Context, username string) ([]model.Class, error) {
+	classDtos, err := s.db.GetClasses(ctx, username)
+	result := make([]model.Class, len(classDtos))
+
+	for i, v := range classDtos {
+		result[i] = mapToClassModel(v)
+	}
+
+	return result, err
+}
+
 func mapToUserModel(s entity.User) model.Users {
 
 	return model.Users{

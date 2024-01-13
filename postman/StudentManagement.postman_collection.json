@@ -9,11 +9,21 @@
 		{
 			"name": "CREATE A USER",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"vuhp\",\r\n    \"password\": \"123456\",\r\n    \"fullname\": \"Nguyen Van B\",\r\n    \"user_type\": \"Teacher\"\r\n}",
+					"raw": "{\r\n    \"username\": \"nva\",\r\n    \"password\": \"123456\",\r\n    \"fullname\": \"Nguyen An\",\r\n    \"user_type\": \"Student\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,14 +31,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user",
+					"raw": "http://localhost:8080/user/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user"
+						"user",
+						"register"
 					]
 				}
 			},
@@ -37,17 +48,28 @@
 		{
 			"name": "GET USERS",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/users",
+					"raw": "http://localhost:8080/user/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users"
+						"user",
+						"profile"
 					]
 				}
 			},
@@ -60,7 +82,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"class_name\": \"Java\",\r\n    \"teacher_id\": 1,\r\n    \"day_of_week\": \"Monday\",\r\n    \"start_time\": \"1/1/2024\",\r\n    \"end_time\": \"20/5/2024\",\r\n    \"students\": [\r\n        {\"user_id\": 3}\r\n    ],\r\n    \"teacher\": {\r\n        \"user_id\": 1\r\n    }\r\n}",
+					"raw": "{\r\n    \"class_name\": \"Java\",\r\n    \"teacher_id\": 1,\r\n    \"day_of_week\": \"Monday\",\r\n    \"start_time\": \"1/1/2024\",\r\n    \"end_time\": \"20/5/2024\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -84,16 +106,27 @@
 		{
 			"name": "GET CLASSES",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/classes",
+					"raw": "http://localhost:8080/class/classes",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"class",
 						"classes"
 					]
 				}
@@ -103,11 +136,21 @@
 		{
 			"name": "REGIS STUDENT-CLASS",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"studentIds\": [\r\n        \"1\",\r\n        \"2\"\r\n    ]\r\n}",
+					"raw": "{\r\n    \"studentIds\": [\r\n        \"2\"\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,16 +158,94 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/classes/assign/1",
+					"raw": "http://localhost:8080/class/classes/assign/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"class",
 						"classes",
 						"assign",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"nva\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ALL USERS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET MY COURES",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/course",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"course"
 					]
 				}
 			},

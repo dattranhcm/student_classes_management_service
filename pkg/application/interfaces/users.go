@@ -13,14 +13,17 @@ type (
 	UsersRepository interface {
 		CreateUser(ctx context.Context, user *entity.User) (sql.Result, error)
 		GetUsers(ctx context.Context) ([]entity.User, error)
+		FindByUsername(ctx context.Context, username string) (entity.User, error)
 	}
 
 	UsersService interface {
 		CreateUser(ctx context.Context, info model.Users) (model.Users, error)
 		GetUsers(context.Context) ([]model.Users, error)
+		FindByUsername(ctx context.Context, username string) (model.Users, error)
 	}
 
 	UsersController interface {
+		Login(ctx echo.Context) error
 		GetUsers(ctx echo.Context) error
 		CreateUser(ctx echo.Context) error
 	}

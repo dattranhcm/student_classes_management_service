@@ -40,6 +40,25 @@ func (api *userController) GetUsers(c echo.Context) error {
 	return c.JSON(http.StatusOK, users)
 }
 
+func (api *userController) Login(e echo.Context) error {
+	credential := new(model.LoginCredential)
+	if err := utils.BindAndValidate(e, credential); err != nil {
+		return err
+	}
+	student, err := api.userService.FindByUsername(e.Request().Context(), credential.Username)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential")
+	}
+
+	if err := utils.ComparePassword(student.Password, credential.Password); err == nil {
+		token := utils.GenerateToken(student)
+		return e.JSON(http.StatusOK, map[string]string{"token": token})
+	}
+
+	return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential abc")
+}
+
 func NewUserController(u interfaces.UsersService) interfaces.UsersController {
 	return &userController{u}
 }

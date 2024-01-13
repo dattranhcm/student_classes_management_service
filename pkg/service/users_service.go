@@ -37,6 +37,12 @@ func (s *usersService) GetUsers(c context.Context) ([]model.Users, error) {
 	return result, nil
 }
 
+func (s *usersService) FindByUsername(ctx context.Context, username string) (model.Users, error) {
+	student, err := s.db.FindByUsername(ctx, username)
+
+	return mapToUserModel(student), err
+}
+
 func mapToUserModel(s entity.User) model.Users {
 
 	return model.Users{
@@ -44,6 +50,7 @@ func mapToUserModel(s entity.User) model.Users {
 		Username: s.Username,
 		UserType: s.UserType,
 		FullName: s.FullName,
+		Password: s.Password,
 	}
 }
 

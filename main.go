@@ -1,16 +1,26 @@
 package main
 
 import (
-	"net/http"
+	"student_classes_management_service/pkg/application/constant"
 	"student_classes_management_service/pkg/application/controller"
 	dataaccess "student_classes_management_service/pkg/data-access"
+	appMiddlewares "student_classes_management_service/pkg/middleware"
 	"student_classes_management_service/pkg/service"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
+
+	server := initializeHTTPServer()
+	// Error handler
+	server.HTTPErrorHandler = appMiddlewares.ErrorHandler
+	server.Validator = &appMiddlewares.CustomValidator{
+		Validator: validator.New(),
+	}
+
 	sqlDB := dataaccess.InitializeSequelDB("postgres://user:password@localhost:5432/student-service?sslmode=disable")
 
 	userRepo := dataaccess.NewUserRepo(sqlDB)
@@ -21,18 +31,18 @@ func main() {
 	classService := service.NewClassService(classRepo)
 	classController := controller.NewClassController(classService)
 
-	server := initializeHTTPServer()
-	// Index page
-	server.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "It works!")
-	})
+	server.POST("/login", userController.Login)
 
-	server.POST("/user", userController.CreateUser)
-	server.GET("/users", userController.GetUsers)
+	authenticated := server.Group("/user", appMiddlewares.Authentication)
+	authenticated.POST("/user", userController.CreateUser)
+	authenticated.GET("/users", userController.GetUsers)
 
-	server.POST("/class", classController.CreateClass)
-	server.GET("/classes", classController.GetClasses)
-	server.POST("/classes/assign/:id", classController.AssignStudent)
+	teacherRoute := server.Group("/class", appMiddlewares.Authentication,
+		appMiddlewares.Authorization(constant.TeacherRole))
+
+	teacherRoute.GET("/classes", classController.GetClasses)
+	teacherRoute.POST("/class", classController.CreateClass)
+	teacherRoute.POST("/classes/assign/:id", classController.AssignStudent)
 
 	server.Logger.Fatal(server.Start("127.0.0.1:8080"))
 }
@@ -42,8 +52,8 @@ func initializeHTTPServer() *echo.Echo {
 
 	e.HideBanner = true
 
-	e.Use(middleware.Logger())  // Logger middleware
-	e.Use(middleware.Recover()) // Panic recover middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 	return e
 }

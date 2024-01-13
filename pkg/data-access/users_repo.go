@@ -25,6 +25,12 @@ func (s *userRepo) GetUsers(c context.Context) ([]entity.User, error) {
 	return list, err
 }
 
+func (s userRepo) FindByUsername(ctx context.Context, username string) (entity.User, error) {
+	user := new(entity.User)
+	err := s.dbc.NewSelect().Model(user).Where("username = ?", username).Relation("Classes").Scan(ctx)
+	return *user, err
+}
+
 func NewUserRepo(dbc *bun.DB) interfaces.UsersRepository {
 	dbc.RegisterModel((*entity.StudentClass)(nil))
 	return &userRepo{dbc}

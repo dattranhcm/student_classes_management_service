@@ -44,7 +44,7 @@ func main() {
 
 	teacherRoute.GET("/classes", classController.GetClasses)
 	teacherRoute.POST("/class", classController.CreateClass)
-	teacherRoute.POST("/classes/assign/:id", classController.AssignStudent)
+	teacherRoute.POST("/classes/assign/:class_id", classController.AssignStudent)
 
 	server.Logger.Fatal(server.Start("127.0.0.1:8080"))
 }

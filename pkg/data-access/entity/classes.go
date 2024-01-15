@@ -23,9 +23,9 @@ type (
 
 	StudentClass struct {
 		bun.BaseModel `bun:"table:students_classes"`
-		ClassID       string   `bun:"class_id,pk"`
+		ClassID       int   `bun:"class_id,pk"`
 		Class         *Class   `bun:"rel:belongs-to,join:class_id=class_id"`
-		StudentID     string   `bun:"student_id,pk"`
+		StudentID     int   `bun:"student_id,pk"`
 		Student       *User `bun:"rel:belongs-to,join:student_id=user_id"`
 	}
 )

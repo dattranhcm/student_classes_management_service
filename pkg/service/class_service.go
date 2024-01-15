@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"strconv"
 	"student_classes_management_service/pkg/application/interfaces"
 	"student_classes_management_service/pkg/application/model"
 	"student_classes_management_service/pkg/data-access/entity"
@@ -60,9 +61,24 @@ func (s *classesService) AssignStudent(e context.Context, classId string, studen
 
 	studentClass := make([]entity.StudentClass, len(studentIds))
 	for i, v := range studentIds {
+
+		studentId, err := strconv.Atoi(v)
+
+		if err != nil {
+			log.Print(err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not convert studentId")
+		}
+
+		classIdNum, err := strconv.Atoi(classId)
+
+		if err != nil {
+			log.Print(err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not convert classId")
+		}
+
 		studentClass[i] = entity.StudentClass{
-			StudentID: v,
-			ClassID:   classId,
+			StudentID: studentId,
+			ClassID:   classIdNum,
 		}
 	}
 
@@ -95,13 +111,13 @@ func mapToClassModel(s entity.Class) model.Class {
 		/*TeacherId: s.TeacherId,
 			TeacherName: s.Teacher.Username,
 		TeacherName: "Dat",  */
-		DayOfWeek:   s.DayOfWeek,
-		StartTime:   s.StartTime,
-		EndTime:     s.EndTime,
-		CreatedAt:   s.CreatedAt,
-		UpdatedAt:   s.UpdatedAt,
-		Teacher: teacher,
-		Students: students,
+		DayOfWeek: s.DayOfWeek,
+		StartTime: s.StartTime,
+		EndTime:   s.EndTime,
+		CreatedAt: s.CreatedAt,
+		UpdatedAt: s.UpdatedAt,
+		Teacher:   teacher,
+		Students:  students,
 	}
 }
 

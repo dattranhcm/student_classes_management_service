@@ -45,9 +45,7 @@ func (api *userController) Login(e echo.Context) error {
 	if err := utils.BindAndValidate(e, credential); err != nil {
 		return err
 	}
-	student, err := api.userService.FindByUsername(e.Request().Context(), credential.Username)
-	fmt.Println("AAA")
-	fmt.Println(student)
+	student, err := api.userService.FindByUsernameToLogin(e.Request().Context(), credential.Username)
 	if err != nil {
 		fmt.Println(err)
 	//	return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credential")

@@ -43,6 +43,12 @@ func (s *usersService) FindByUsername(ctx context.Context, username string) (mod
 	return mapToUserModel(student), err
 }
 
+func (s *usersService) FindByUsernameToLogin(ctx context.Context, username string) (model.Users, error) {
+	student, err := s.db.FindByUsername(ctx, username)
+
+	return getUserSensitiveInfo(student), err
+}
+
 
 func (s *usersService) GetClasses(ctx context.Context, username string) ([]model.Class, error) {
 	classDtos, err := s.db.GetClasses(ctx, username)
@@ -56,7 +62,23 @@ func (s *usersService) GetClasses(ctx context.Context, username string) ([]model
 }
 
 func mapToUserModel(s entity.User) model.Users {
+	classes := make([]model.Class, len(s.Classes))
 
+	for i, v := range s.Classes {
+		classes[i] = mapToClassModel(v)
+	}
+
+	return model.Users{
+		UserId:   s.UserId,
+		Username: s.Username,
+		UserType: s.UserType,
+		FullName: s.FullName,
+		Classes: classes,
+	}
+	
+}
+
+func getUserSensitiveInfo(s entity.User) model.Users {
 	return model.Users{
 		UserId:   s.UserId,
 		Username: s.Username,
@@ -64,7 +86,9 @@ func mapToUserModel(s entity.User) model.Users {
 		FullName: s.FullName,
 		Password: s.Password,
 	}
+	
 }
+
 
 func NewUserService(db interfaces.UsersRepository) *usersService {
 	return &usersService{db}

@@ -21,6 +21,7 @@ type (
 		CreateUser(ctx context.Context, info model.Users) (model.Users, error)
 		GetUsers(context.Context) ([]model.Users, error)
 		FindByUsername(ctx context.Context, username string) (model.Users, error)
+		FindByUsernameToLogin(ctx context.Context, username string) (model.Users, error)
 		GetClasses(context.Context, string) ([]model.Class, error)
 	}
 

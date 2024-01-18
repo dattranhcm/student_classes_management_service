@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "CREATE A USER",
+			"name": "User Register",
 			"request": {
 				"auth": {
 					"type": "oauth2",
@@ -46,11 +46,21 @@
 			"response": []
 		},
 		{
-			"name": "GET USERS",
+			"name": "User View Profile",
 			"request": {
 				"auth": {
 					"type": "oauth2",
 					"oauth2": [
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "accessToken",
+							"value": "",
+							"type": "string"
+						},
 						{
 							"key": "addTokenTo",
 							"value": "header",
@@ -78,6 +88,16 @@
 		{
 			"name": "CREATE CLASS",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -109,6 +129,16 @@
 				"auth": {
 					"type": "oauth2",
 					"oauth2": [
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "accessToken",
+							"value": "",
+							"type": "string"
+						},
 						{
 							"key": "addTokenTo",
 							"value": "header",
@@ -176,6 +206,18 @@
 		},
 		{
 			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"student_access_token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],

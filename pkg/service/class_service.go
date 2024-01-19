@@ -16,10 +16,10 @@ type classesService struct {
 	db interfaces.ClassesRepository
 }
 
-func (s *classesService) CreateClass(ctx context.Context, info model.Class) (model.Class, error) {
+func (s *classesService) CreateClass(ctx context.Context, info model.Class, teacherId int) (model.Class, error) {
 	newClass := entity.Class{
 		ClassName: info.ClassName,
-		TeacherId: 1,
+		TeacherId: teacherId,
 		DayOfWeek: info.DayOfWeek,
 		StartTime: info.StartTime,
 		EndTime:   info.EndTime,
@@ -44,7 +44,6 @@ func (s *classesService) GetClasses(c context.Context) ([]model.Class, error) {
 
 func (s *classesService) GetById(e context.Context, id string, userId string) (*model.Class, error) {
 	classEntity, err := s.db.GetById(e, id, userId)
-
 	if classEntity == nil {
 		return nil, echo.NewHTTPError(http.StatusNotFound, "Class not found")
 	}

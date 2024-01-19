@@ -18,7 +18,7 @@ type (
 	}
 
 	ClassesService interface {
-		CreateClass(ctx context.Context, info model.Class) (model.Class, error)
+		CreateClass(ctx context.Context, info model.Class, teacherId int) (model.Class, error)
 		GetClasses(context.Context) ([]model.Class, error)
 		GetById(ctx context.Context, id string, userId string) (*model.Class, error)
 		AssignStudent(ctx context.Context, classId string, studentIds []string, userId string) error

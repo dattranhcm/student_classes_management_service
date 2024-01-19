@@ -33,11 +33,11 @@ func main() {
 
 	server.POST("/login", userController.Login)
 	server.GET("/users", userController.GetUsers)
+	server.POST("/register", userController.CreateUser)
 
 	authenticated := server.Group("/user", appMiddlewares.Authentication)
-	authenticated.POST("/register", userController.CreateUser)
 	authenticated.GET("/profile", userController.Profile)
-	authenticated.GET("/course",userController.GetClasses)
+	authenticated.GET("/course", userController.GetClasses)
 
 	teacherRoute := server.Group("/class", appMiddlewares.Authentication,
 		appMiddlewares.Authorization(constant.TeacherRole))
